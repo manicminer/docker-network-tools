@@ -79,9 +79,11 @@ RUN cat /tmp/azure-cli.sources | SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dp
 RUN apt-get update && apt-get -y install azure-cli
 
 # k9s
-RUN wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb && sudo apt install ./k9s_linux_amd64.deb && rm k9s_linux_amd64.deb
+RUN wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb -O /tmp/k9s_linux.deb && dpkg -i /tmp/k9s_linux.deb
 
 # kubectl
 RUN curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+
+RUN rm -rf /tmp/*
 
 # vim: set ts=2 sts=2 sw=2 et:
