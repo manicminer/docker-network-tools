@@ -95,6 +95,10 @@ RUN wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dp
 # kubectl
 RUN curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
 
+# sqlcmd (golang version)
+RUN wget https://github.com/microsoft/go-sqlcmd/releases/download/v1.10.0/sqlcmd-linux-$(dpkg --print-architecture).tar.bz2 -O /tmp/sqlcmd-linux.tar.bz2
+RUN tar xf /tmp/sqlcmd-linux.tar.bz2 -C /tmp && mv /tmp/sqlcmd /usr/local/bin/
+
 RUN rm -rf /tmp/*
 
 # vim: set ts=2 sts=2 sw=2 et:
