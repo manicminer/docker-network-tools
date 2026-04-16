@@ -3,7 +3,7 @@ FROM ubuntu:24.04
 RUN apt-get update
 RUN apt-get -y dist-upgrade
 
-RUN apt-get -y install \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
   apache2-utils \
   apt-transport-https \
   bash \
@@ -33,6 +33,8 @@ RUN apt-get -y install \
   lsb-release \
   mariadb-client \
   masscan \
+  mc \
+  mitmproxy \
   moreutils \
   mosh \
   mtr-tiny \
@@ -78,13 +80,13 @@ RUN install -m 0755 -d /etc/apt/keyrings
 # azure-cli
 RUN curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/etc/apt/keyrings/microsoft.gpg
 COPY apt-sources/azure-cli.sources /tmp/
-RUN cat /tmp/azure-cli.sources | SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst >/etc/apt/sources.list.d/azure-cli.sources
+RUN SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst </tmp/azure-cli.sources >/etc/apt/sources.list.d/azure-cli.sources
 RUN apt-get update && apt-get -y install azure-cli
 
 # docker-cli
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 COPY apt-sources/docker.sources /tmp/
-RUN cat /tmp/docker.sources | SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst >/etc/apt/sources.list.d/docker.sources
+RUN SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst </tmp/docker.sources >/etc/apt/sources.list.d/docker.sources
 RUN apt-get update && apt-get -y install docker-ce-cli
 
 # k9s
