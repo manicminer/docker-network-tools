@@ -29,12 +29,6 @@ jobs:
           username: manicminer
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: manicminer/network-tools
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
@@ -49,7 +43,7 @@ jobs:
           file: ./Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: latest
+          tags: manicminer/network-tools:latest
           labels: ${{ steps.meta.outputs.labels }}
 
 
