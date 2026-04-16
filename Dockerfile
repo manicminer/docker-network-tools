@@ -69,14 +69,23 @@ RUN apt-get -y install \
   unzip \
   vim \
   wget \
+  xz-utils \
   yq \
   zsh
 
+RUN install -m 0755 -d /etc/apt/keyrings
+
 # azure-cli
-RUN mkdir -p /etc/apt/keyrings && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/etc/apt/keyrings/microsoft.gpg
+RUN curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/etc/apt/keyrings/microsoft.gpg
 COPY apt-sources/azure-cli.sources /tmp/
 RUN cat /tmp/azure-cli.sources | SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst >/etc/apt/sources.list.d/azure-cli.sources
 RUN apt-get update && apt-get -y install azure-cli
+
+# docker-cli
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+COPY apt-sources/docker.sources /tmp/
+RUN cat /tmp/docker.sources | SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst >/etc/apt/sources.list.d/docker.sources
+RUN apt-get update && apt-get -y install docker-ce-cli
 
 # k9s
 RUN wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_$(dpkg --print-architecture).deb -O /tmp/k9s_linux.deb && dpkg -i /tmp/k9s_linux.deb
