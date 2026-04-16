@@ -72,4 +72,16 @@ RUN apt-get -y install \
   yq \
   zsh
 
+# azure-cli
+RUN mkdir -p /etc/apt/keyrings && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/etc/apt/keyrings/microsoft.gpg
+COPY apt-sources/azure-cli.sources /tmp/
+RUN cat /tmp/azure-cli.sources | SUITES="$(lsb_release -cs)" ARCHITECTURES="$(dpkg --print-architecture)" envsubst >/etc/apt/sources.list.d/azure-cli.sources
+RUN apt-get update && apt-get -y install azure-cli
+
+# k9s
+RUN wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb && sudo apt install ./k9s_linux_amd64.deb && rm k9s_linux_amd64.deb
+
+# kubectl
+RUN curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+
 # vim: set ts=2 sts=2 sw=2 et:
