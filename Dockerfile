@@ -30,6 +30,8 @@ RUN apt-get -y install \
   iptables \
   jq \
   ldnsutils \
+  lsb-release \
+  mariadb-client \
   masscan \
   moreutils \
   mosh \
@@ -46,6 +48,7 @@ RUN apt-get -y install \
   openssh-client \
   openssh-server \
   openssl \
+  postgresql-client \
   procps \
   pwgen \
   python3 \
