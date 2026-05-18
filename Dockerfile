@@ -8,6 +8,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
   apt-transport-https \
   bash \
   bash-completion \
+  bind9-dnsutils \
   bind9-host \
   bind9-utils \
   build-essential \
